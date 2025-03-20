@@ -153,9 +153,7 @@ const Register = () => {
                     required
                   />
                 </div>
-                <p className="text-xs text-slate-500">
-                  Mật khẩu phải có ít nhất 8 ký tự, bao gồm 1 chữ hoa, 1 chữ thường và 1 số
-                </p>
+                
               </div>
               <div className="flex items-start space-x-2">
                 <Checkbox
