@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, User, Mail, Lock, CheckCircle, BookOpen, Sparkles } from "lucide-react";
+import { authService, RegisterRequest } from "@/services/auth.service";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ const Register = () => {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,16 +32,32 @@ const Register = () => {
     
     setIsLoading(true);
 
-    // This would normally be an API call
-    setTimeout(() => {
-      // Simulate a successful registration
+    try {
+      const registerData: RegisterRequest = {
+        name,
+        email,
+        password
+      };
+      
+      await authService.register(registerData);
+      
       toast({
         title: "Đăng ký thành công",
         description: "Tài khoản của bạn đã được tạo. Chào mừng bạn!",
       });
+      
+      // Điều hướng sau khi đăng ký thành công
+      navigate("/");
+    } catch (error) {
+      console.error("Register error:", error);
+      toast({
+        title: "Đăng ký thất bại",
+        description: error instanceof Error ? error.message : "Vui lòng kiểm tra thông tin đăng ký",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      // Would normally redirect to dashboard or home page
-    }, 1500);
+    }
   };
 
   return (

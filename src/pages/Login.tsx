@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, Mail, Lock, BookOpen } from "lucide-react";
+import { authService, LoginRequest } from "@/services/auth.service";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,21 +15,37 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // This would normally be an API call
-    setTimeout(() => {
-      // Simulate a successful login
+    try {
+      const loginData: LoginRequest = {
+        email,
+        password
+      };
+      
+      await authService.login(loginData);
+      
       toast({
         title: "Đăng nhập thành công",
         description: "Chào mừng bạn quay trở lại!",
       });
+      
+      // Điều hướng sau khi đăng nhập thành công
+      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({
+        title: "Đăng nhập thất bại",
+        description: error instanceof Error ? error.message : "Vui lòng kiểm tra thông tin đăng nhập",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      // Would normally redirect to dashboard or home page
-    }, 1500);
+    }
   };
 
   return (
