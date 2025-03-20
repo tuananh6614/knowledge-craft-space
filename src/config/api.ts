@@ -1,12 +1,12 @@
 
 // API configuration
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
 
 // API endpoints
 export const ENDPOINTS = {
   // Auth
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
+  LOGIN: '/users/login',
+  REGISTER: '/users/register',
   
   // Courses
   COURSES: '/courses',
@@ -19,4 +19,9 @@ export const ENDPOINTS = {
   // Blog
   BLOG_POSTS: '/blog',
   BLOG_POST_BY_ID: (id: string) => `/blog/${id}`,
+  
+  // Payment
+  PAYMENTS: '/payment',
+  CREATE_PAYMENT: '/payment/create',
+  PAYMENT_STATUS: (id: string) => `/payment/${id}/status`,
 };

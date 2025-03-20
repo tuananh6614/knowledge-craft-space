@@ -36,7 +36,24 @@ class CourseService {
     return apiService.get<Course>(ENDPOINTS.COURSE_BY_ID(id));
   }
   
-  // Các method khác như enrollCourse, rateCourse có thể được thêm vào sau
+  // Đăng ký khóa học
+  async enrollCourse(courseId: string): Promise<{ success: boolean; message: string }> {
+    return apiService.post<{ success: boolean; message: string }>(
+      `${ENDPOINTS.COURSE_BY_ID(courseId)}/enroll`,
+      { requiresAuth: true }
+    );
+  }
+  
+  // Đánh giá khóa học
+  async rateCourse(courseId: string, rating: number, comment?: string): Promise<{ success: boolean }> {
+    return apiService.post<{ success: boolean }>(
+      `${ENDPOINTS.COURSE_BY_ID(courseId)}/rate`,
+      { 
+        body: { rating, comment },
+        requiresAuth: true 
+      }
+    );
+  }
 }
 
 export const courseService = new CourseService();
