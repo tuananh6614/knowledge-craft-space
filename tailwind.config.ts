@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +60,11 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
         },
+        'france-blue': '#0055A4',
+        'france-white': '#FFFFFF',
+        'france-red': '#EF4135',
+        'navy': '#28395A',
+        'cream': '#F8F4E3',
       },
       borderRadius: {
         lg: 'var(--radius)',
