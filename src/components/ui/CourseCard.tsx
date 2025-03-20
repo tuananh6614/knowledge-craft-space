@@ -10,7 +10,7 @@ interface CourseCardProps {
   description: string;
   image: string;
   category: string;
-  level: "Beginner" | "Intermediate" | "Advanced";
+  level: "Beginner" | "Intermediate" | "Advanced" | "Cơ bản" | "Trung cấp" | "Nâng cao";
   duration: string;
   students: number;
   rating: number;
@@ -60,7 +60,7 @@ const CourseCard = ({
           </div>
           <div className="flex items-center">
             <Users className="h-3.5 w-3.5 mr-1" />
-            <span>{students.toLocaleString()} students</span>
+            <span>{students.toLocaleString()} học viên</span>
           </div>
         </CardFooter>
       </Card>

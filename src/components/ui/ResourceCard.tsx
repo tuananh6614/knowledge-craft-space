@@ -9,7 +9,7 @@ interface ResourceCardProps {
   id: string;
   title: string;
   description: string;
-  type: "PDF" | "Video" | "Audio" | "Package";
+  type: "PDF" | "Video" | "Audio" | "Package" | "Gói";
   isPremium: boolean;
   size?: string;
 }
@@ -38,7 +38,7 @@ const ResourceCard = ({
                 isPremium ? "bg-primary" : "bg-secondary"
               }`}
             >
-              {isPremium ? "Premium" : "Free"}
+              {isPremium ? "Premium" : "Miễn phí"}
             </Badge>
           </div>
           <div className="flex-shrink-0">{getTypeIcon()}</div>
@@ -50,7 +50,7 @@ const ResourceCard = ({
         </p>
         {size && (
           <div className="mt-2 text-xs text-muted-foreground">
-            Size: {size}
+            Kích thước: {size}
           </div>
         )}
       </CardContent>
@@ -63,12 +63,12 @@ const ResourceCard = ({
             {isPremium ? (
               <>
                 <Lock className="mr-2 h-4 w-4" />
-                Premium Access
+                Nâng cấp Premium
               </>
             ) : (
               <>
                 <Download className="mr-2 h-4 w-4" />
-                Download
+                Tải xuống
               </>
             )}
           </Button>
