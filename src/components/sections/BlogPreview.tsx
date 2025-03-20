@@ -4,42 +4,42 @@ import BlogPostCard from "@/components/ui/BlogPostCard";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
-// Mock data for blog posts
+// Mock data cho bài viết blog
 const MOCK_BLOG_POSTS = [
   {
     id: "1",
-    title: "How to Master a New Programming Language in 30 Days",
-    excerpt: "Discover proven strategies to efficiently learn any programming language in just one month.",
+    title: "Làm thế nào để thành thạo một ngôn ngữ lập trình mới trong 30 ngày",
+    excerpt: "Khám phá các chiến lược đã được chứng minh để học hiệu quả bất kỳ ngôn ngữ lập trình nào chỉ trong một tháng.",
     image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=869&auto=format&fit=crop",
     author: {
-      name: "Alex Johnson",
+      name: "Nguyễn Minh Tuấn",
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     },
-    date: "May 12, 2023",
+    date: "12 Tháng 5, 2023",
     commentCount: 24,
   },
   {
     id: "2",
-    title: "The Future of Education: AI-Powered Learning Assistants",
-    excerpt: "Explore how artificial intelligence is transforming education and creating personalized learning experiences.",
+    title: "Tương lai của giáo dục: Trợ lý học tập sử dụng trí tuệ nhân tạo",
+    excerpt: "Khám phá cách trí tuệ nhân tạo đang chuyển đổi giáo dục và tạo ra trải nghiệm học tập cá nhân hóa.",
     image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=806&auto=format&fit=crop",
     author: {
-      name: "Sophia Chen",
+      name: "Trần Thị Mai",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     },
-    date: "April 28, 2023",
+    date: "28 Tháng 4, 2023",
     commentCount: 18,
   },
   {
     id: "3",
-    title: "5 Essential Study Techniques Based on Cognitive Science",
-    excerpt: "Learn evidence-based study methods that will help you retain information more effectively.",
+    title: "5 kỹ thuật học tập thiết yếu dựa trên khoa học nhận thức",
+    excerpt: "Tìm hiểu các phương pháp học tập dựa trên bằng chứng sẽ giúp bạn ghi nhớ thông tin hiệu quả hơn.",
     image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=873&auto=format&fit=crop",
     author: {
-      name: "David Miller",
+      name: "Lê Văn Hoàng",
       avatar: "https://randomuser.me/api/portraits/men/76.jpg",
     },
-    date: "March 15, 2023",
+    date: "15 Tháng 3, 2023",
     commentCount: 32,
   },
 ];
@@ -50,14 +50,14 @@ const BlogPreview = () => {
       <div className="container-custom">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
           <div>
-            <h2 className="heading-lg max-w-2xl">Latest from our Blog</h2>
+            <h2 className="heading-lg text-navy max-w-2xl">Bài viết mới nhất</h2>
             <p className="body-lg text-muted-foreground mt-2 max-w-2xl">
-              Insights, tips, and community discussions on education and learning
+              Chia sẻ kiến thức, mẹo và thảo luận cộng đồng về giáo dục và học tập
             </p>
           </div>
           <Link to="/blog" className="mt-4 md:mt-0">
-            <Button variant="outline">
-              View All Posts
+            <Button variant="outline" className="border-france-blue text-france-blue hover:bg-france-blue/10">
+              Xem tất cả bài viết
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
