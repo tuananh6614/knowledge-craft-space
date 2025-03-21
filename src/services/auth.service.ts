@@ -4,18 +4,19 @@ import { ENDPOINTS } from '@/config/api';
 
 // Định nghĩa kiểu dữ liệu
 export interface LoginRequest {
-  username: string;  // Thay đổi từ email sang username theo API mới
+  username: string;
   password: string;
 }
 
 export interface RegisterRequest {
-  username: string;  // Thay đổi từ name sang username theo API mới
+  username: string;
   email: string;
   password: string;
 }
 
 export interface AuthResponse {
   token: string;
+  message?: string;
   user?: {
     id: number;
     username: string;
@@ -29,7 +30,7 @@ class AuthService {
   // Đăng nhập
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
-      const response = await apiService.post<{ token: string }>(ENDPOINTS.LOGIN, {
+      const response = await apiService.post<AuthResponse>(ENDPOINTS.LOGIN, {
         body: credentials,
       });
       
@@ -37,8 +38,7 @@ class AuthService {
       if (response && response.token) {
         localStorage.setItem('auth_token', response.token);
         
-        // Giả định thông tin người dùng từ token JWT (frontend không nhận được user từ API)
-        // Thông tin người dùng có thể được lấy từ API riêng biệt hoặc decode từ token
+        // Giả định thông tin người dùng từ token JWT
         const user = this.getUserFromToken(response.token);
         if (user) {
           localStorage.setItem('user', JSON.stringify(user));
@@ -52,7 +52,7 @@ class AuthService {
     }
   }
   
-  // Decode JWT token để lấy thông tin user (phương pháp đơn giản)
+  // Decode JWT token để lấy thông tin user
   private getUserFromToken(token: string): AuthResponse['user'] | null {
     try {
       const base64Url = token.split('.')[1];
@@ -66,7 +66,7 @@ class AuthService {
       const payload = JSON.parse(jsonPayload);
       return {
         id: payload.userId || payload.id || 0,
-        username: payload.username || payload.name || 'User', // Mặc định nếu không có trong token
+        username: payload.username || 'User',
         email: payload.email || '',
         role: payload.role,
       };
@@ -79,9 +79,13 @@ class AuthService {
   // Đăng ký
   async register(userData: RegisterRequest): Promise<AuthResponse> {
     try {
-      const response = await apiService.post<{ token: string }>(ENDPOINTS.REGISTER, {
+      console.log('Sending register request with data:', userData);
+      
+      const response = await apiService.post<AuthResponse>(ENDPOINTS.REGISTER, {
         body: userData,
       });
+      
+      console.log('Register response:', response);
       
       // Nếu API trả về token trực tiếp sau khi đăng ký
       if (response && response.token) {
@@ -95,11 +99,8 @@ class AuthService {
         return response;
       }
       
-      // Nếu API không trả về token, tự động đăng nhập
-      return this.login({
-        username: userData.username,
-        password: userData.password
-      });
+      // Nếu API không trả về token, trả về response như nhận được
+      return response;
     } catch (error) {
       console.error('Register error:', error);
       throw error;
@@ -110,7 +111,6 @@ class AuthService {
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    // Redirect về trang chủ hoặc đăng nhập có thể được xử lý ở component
   }
   
   // Kiểm tra đã đăng nhập chưa

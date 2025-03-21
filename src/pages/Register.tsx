@@ -13,6 +13,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -30,6 +31,9 @@ const Register = () => {
     }
 
     try {
+      setIsSubmitting(true);
+      console.log("Submitting registration with:", { username, email, password });
+      
       await register(username, email, password);
       
       toast({
@@ -41,11 +45,19 @@ const Register = () => {
       navigate("/");
     } catch (error) {
       console.error("Register error:", error);
+      
+      let errorMessage = "Vui lòng kiểm tra thông tin đăng ký";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Đăng ký thất bại",
-        description: error instanceof Error ? error.message : "Vui lòng kiểm tra thông tin đăng ký",
+        description: errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -169,9 +181,9 @@ const Register = () => {
             <Button 
               type="submit" 
               className="w-full bg-france-red hover:bg-france-red/90 text-white transition-colors duration-300" 
-              disabled={isLoading}
+              disabled={isSubmitting || isLoading}
             >
-              {isLoading ? (
+              {(isSubmitting || isLoading) ? (
                 <div className="flex items-center justify-center">
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2"></span>
                   <span>Đang tạo tài khoản...</span>

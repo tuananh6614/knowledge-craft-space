@@ -1,7 +1,7 @@
 
 // API configuration
 // Sử dụng API_URL từ biến môi trường nếu có, nếu không sử dụng URL mặc định
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://demoapi.click/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // API endpoints
 export const ENDPOINTS = {

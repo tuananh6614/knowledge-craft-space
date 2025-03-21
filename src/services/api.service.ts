@@ -55,16 +55,21 @@ class ApiService {
 
   // Xử lý response
   private async handleResponse<T>(response: Response): Promise<T> {
+    // Trả về lỗi chi tiết từ máy chủ
     if (!response.ok) {
-      // Xử lý lỗi từ API
       let errorMessage = '';
       try {
         const errorData = await response.json();
-        errorMessage = errorData.message || errorData.error || response.statusText || 'Có lỗi xảy ra';
+        errorMessage = errorData.error || errorData.message || response.statusText || 'Có lỗi xảy ra';
+        throw new Error(errorMessage);
       } catch (e) {
-        errorMessage = `Lỗi máy chủ: ${response.status} ${response.statusText}`;
+        if (e instanceof Error) {
+          throw e;
+        } else {
+          errorMessage = `Lỗi máy chủ: ${response.status} ${response.statusText}`;
+          throw new Error(errorMessage);
+        }
       }
-      throw new Error(errorMessage);
     }
 
     // Xử lý response không có dữ liệu
@@ -98,6 +103,9 @@ class ApiService {
     try {
       const url = this.createUrl(endpoint);
       const headers = this.createHeaders(options);
+
+      console.log('POST request to:', url);
+      console.log('Request body:', options?.body);
 
       const response = await fetch(url, {
         method: 'POST',
