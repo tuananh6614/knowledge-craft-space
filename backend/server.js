@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || '0ea214cd61b2ae8bd9c0fd33eb561fc0e8bf1911a4d638766028c2800bc9379da3bd406d2baa24a6bb7824d1b47c202999620ffcb6c8b926388c1d77db85b77e';
 
 // Middleware
 app.use(cors());
@@ -24,7 +24,7 @@ const db = mysql.createConnection({
   host: 'localhost', 
   user: 'root',      
   password: '',      
-  database: 'learning_platform'  // Tên database của bạn
+  database: 'learningplatform'  // Tên database của bạn
 });
 
 db.connect((err) => {
