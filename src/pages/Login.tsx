@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,7 @@ const Login = () => {
                   <Input
                     id="username"
                     type="text"
-                    placeholder="tên đăng nhập"
+                    placeholder="tên đăng nhập (không phải email)"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="pl-10 border-slate-300 focus:border-france-blue focus:ring-france-blue/20"
