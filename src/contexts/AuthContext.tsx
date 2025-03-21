@@ -4,8 +4,8 @@ import { authService } from '@/services/auth.service';
 
 // Định nghĩa kiểu dữ liệu người dùng
 interface User {
-  id: string;
-  name: string;
+  id: number;
+  username: string; // Đổi từ name sang username theo API mới
   email: string;
   role?: string;
 }
@@ -15,8 +15,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>; // Đổi từ email sang username
+  register: (username: string, email: string, password: string) => Promise<void>; // Đổi từ name sang username
   logout: () => void;
 }
 
@@ -45,22 +45,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Hàm đăng nhập
-  const login = async (email: string, password: string) => {
+  const login = async (username: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await authService.login({ email, password });
-      setUser(response.user);
+      const response = await authService.login({ username, password });
+      const currentUser = authService.getCurrentUser();
+      setUser(currentUser);
     } finally {
       setIsLoading(false);
     }
   };
 
   // Hàm đăng ký
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (username: string, email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await authService.register({ name, email, password });
-      setUser(response.user);
+      const response = await authService.register({ username, email, password });
+      const currentUser = authService.getCurrentUser();
+      setUser(currentUser);
     } finally {
       setIsLoading(false);
     }

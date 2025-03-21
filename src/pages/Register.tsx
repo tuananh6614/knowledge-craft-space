@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,14 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, User, Mail, Lock, CheckCircle, BookOpen, Sparkles } from "lucide-react";
-import { authService, RegisterRequest } from "@/services/auth.service";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Register = () => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { register, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -29,17 +28,9 @@ const Register = () => {
       });
       return;
     }
-    
-    setIsLoading(true);
 
     try {
-      const registerData: RegisterRequest = {
-        name,
-        email,
-        password
-      };
-      
-      await authService.register(registerData);
+      await register(username, email, password);
       
       toast({
         title: "Đăng ký thành công",
@@ -55,8 +46,6 @@ const Register = () => {
         description: error instanceof Error ? error.message : "Vui lòng kiểm tra thông tin đăng ký",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -110,15 +99,15 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Họ và tên</Label>
+                <Label htmlFor="username">Tên đăng nhập</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <Input
-                    id="name"
+                    id="username"
                     type="text"
-                    placeholder="Nguyễn Văn A"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Tên đăng nhập"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="pl-10 border-slate-300 focus:border-france-blue focus:ring-france-blue/20"
                     required
                   />

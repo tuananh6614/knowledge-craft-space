@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,28 +5,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowRight, Mail, Lock, BookOpen } from "lucide-react";
-import { authService, LoginRequest } from "@/services/auth.service";
+import { ArrowRight, User, Lock, BookOpen } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
-      const loginData: LoginRequest = {
-        email,
-        password
-      };
-      
-      await authService.login(loginData);
+      await login(username, password);
       
       toast({
         title: "Đăng nhập thành công",
@@ -43,8 +36,6 @@ const Login = () => {
         description: error instanceof Error ? error.message : "Vui lòng kiểm tra thông tin đăng nhập",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -70,15 +61,15 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="username">Tên đăng nhập</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="username"
+                    type="text"
+                    placeholder="tên đăng nhập"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="pl-10 border-slate-300 focus:border-france-blue focus:ring-france-blue/20"
                     required
                   />

@@ -39,10 +39,11 @@ class ApiService {
   private createHeaders(options?: RequestOptions): HeadersInit {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
       ...(options?.headers || {}),
     };
 
-    if (options?.requiresAuth) {
+    if (options?.requiresAuth !== false) {
       const token = this.getAuthToken();
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -57,7 +58,7 @@ class ApiService {
     if (!response.ok) {
       // Xử lý lỗi từ API
       const errorData = await response.json().catch(() => ({}));
-      const errorMessage = errorData.message || response.statusText || 'Có lỗi xảy ra';
+      const errorMessage = errorData.message || errorData.error || response.statusText || 'Có lỗi xảy ra';
       throw new Error(errorMessage);
     }
 
