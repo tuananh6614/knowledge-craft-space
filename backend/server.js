@@ -86,13 +86,13 @@ app.post('/api/users/register', async (req, res) => {
 // Đăng nhập (sử dụng mật khẩu gốc)
 app.post('/api/users/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    console.log('Login request:', { username, password });
+    const { email, password } = req.body;
+    console.log('Login request:', { email, password });
     
-    // Tìm người dùng trong cơ sở dữ liệu bằng username hoặc email
+    // Tìm người dùng trong cơ sở dữ liệu bằng email hoặc email
     db.query(
-      'SELECT * FROM users WHERE username = ? OR email = ?',
-      [username, username],
+      'SELECT * FROM users WHERE email = ? OR email = ?',
+      [email, email],
       async (err, results) => {
         if (err) {
           console.error('Error finding user:', err);
