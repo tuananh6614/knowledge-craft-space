@@ -87,16 +87,19 @@ app.post('/api/users/register', async (req, res) => {
 app.post('/api/users/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('Login request:', { username, password });
     
-    // Tìm người dùng trong cơ sở dữ liệu
+    // Tìm người dùng trong cơ sở dữ liệu bằng username hoặc email
     db.query(
-      'SELECT * FROM users WHERE username = ?',
-      [username],
+      'SELECT * FROM users WHERE username = ? OR email = ?',
+      [username, username],
       async (err, results) => {
         if (err) {
           console.error('Error finding user:', err);
           return res.status(500).json({ error: 'Lỗi máy chủ' });
         }
+        
+        console.log('User search results:', results);
         
         if (results.length === 0) {
           return res.status(401).json({ error: 'Thông tin đăng nhập không chính xác' });
@@ -106,6 +109,7 @@ app.post('/api/users/login', async (req, res) => {
         
         // So sánh mật khẩu trực tiếp
         if (password !== user.password) {
+          console.log('Password mismatch. Expected:', user.password, 'Got:', password);
           return res.status(401).json({ error: 'Thông tin đăng nhập không chính xác' });
         }
         
@@ -120,6 +124,7 @@ app.post('/api/users/login', async (req, res) => {
           { expiresIn: '24h' }
         );
         
+        console.log('Login successful, token created');
         res.json({ token });
       }
     );
