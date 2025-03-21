@@ -23,7 +23,7 @@ const db = mysql.createConnection({
   host: 'localhost', 
   user: 'root',      
   password: '',      
-  database: 'learning_platform'  // Tên database của bạn
+  database: 'learningplatform'  // Tên database của bạn
 });
 
 db.connect((err) => {
