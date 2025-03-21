@@ -57,8 +57,13 @@ class ApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       // Xử lý lỗi từ API
-      const errorData = await response.json().catch(() => ({}));
-      const errorMessage = errorData.message || errorData.error || response.statusText || 'Có lỗi xảy ra';
+      let errorMessage = '';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || response.statusText || 'Có lỗi xảy ra';
+      } catch (e) {
+        errorMessage = `Lỗi máy chủ: ${response.status} ${response.statusText}`;
+      }
       throw new Error(errorMessage);
     }
 
@@ -72,56 +77,76 @@ class ApiService {
 
   // GET request
   async get<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.createUrl(endpoint, options?.params);
-    const headers = this.createHeaders(options);
+    try {
+      const url = this.createUrl(endpoint, options?.params);
+      const headers = this.createHeaders(options);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-    });
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+      });
 
-    return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error(`GET request to ${endpoint} failed:`, error);
+      throw error;
+    }
   }
 
   // POST request
   async post<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.createUrl(endpoint);
-    const headers = this.createHeaders(options);
+    try {
+      const url = this.createUrl(endpoint);
+      const headers = this.createHeaders(options);
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: options?.body ? JSON.stringify(options.body) : undefined,
-    });
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: options?.body ? JSON.stringify(options.body) : undefined,
+      });
 
-    return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error(`POST request to ${endpoint} failed:`, error);
+      throw error;
+    }
   }
 
   // PUT request
   async put<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.createUrl(endpoint);
-    const headers = this.createHeaders(options);
+    try {
+      const url = this.createUrl(endpoint);
+      const headers = this.createHeaders(options);
 
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers,
-      body: options?.body ? JSON.stringify(options.body) : undefined,
-    });
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers,
+        body: options?.body ? JSON.stringify(options.body) : undefined,
+      });
 
-    return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error(`PUT request to ${endpoint} failed:`, error);
+      throw error;
+    }
   }
 
   // DELETE request
   async delete<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.createUrl(endpoint);
-    const headers = this.createHeaders(options);
+    try {
+      const url = this.createUrl(endpoint);
+      const headers = this.createHeaders(options);
 
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers,
-    });
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers,
+      });
 
-    return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error(`DELETE request to ${endpoint} failed:`, error);
+      throw error;
+    }
   }
 }
 
